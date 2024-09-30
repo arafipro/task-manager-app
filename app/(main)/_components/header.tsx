@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between p-4 shadow-sm">
+    <header className="sticky top-0 bg-white flex items-center justify-between p-4 shadow-sm">
       <Link href="/">
         <h1 className="md:text-2xl font-bold">Task Manager</h1>
       </Link>

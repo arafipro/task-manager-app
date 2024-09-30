@@ -1,4 +1,5 @@
 import Header from "./_components/header";
+import SideBar from "./_components/sidebar";
 
 export default function MainLayout({
   children,
@@ -6,9 +7,12 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <>
       <Header />
-      {children}
-    </div>
+      <div className="flex">
+        <SideBar />
+        {children}
+      </div>
+    </>
   );
 }
