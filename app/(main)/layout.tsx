@@ -11,7 +11,7 @@ export default function MainLayout({
       <Header />
       <div className="flex">
         <SideBar />
-        {children}
+        <div className="w-full h-[2000px] bg-slate-300 p-4">{children}</div>
       </div>
     </>
   );

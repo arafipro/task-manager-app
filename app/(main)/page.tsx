@@ -1,9 +1,13 @@
-import TaskDetailCard from "./_components/task/task-detail-card";
+import AddTaskForm from "./_components/task/add-task-form";
+import TaskList from "./_components/task/task-list";
+import { getTasks } from "./action";
 
-export default function Home() {
+export default async function Home() {
+  const tasks = await getTasks();
   return (
-    <main className="w-full h-[2000px] bg-slate-300">
-      <TaskDetailCard />
-    </main>
+    <>
+      <TaskList tasks={tasks} />
+      <AddTaskForm />
+    </>
   );
 }
