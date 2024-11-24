@@ -20,39 +20,17 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { createTaskSchema } from "@/lib/validation-schema/taskSchema";
+import { CreateTask } from "@/types/task";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { createTask } from "../../action";
 
-const taskSchema = z.object({
-  id: z.number(),
-  title: z
-    .string({ required_error: "タスクのタイトルを入力してください" })
-    .trim()
-    .min(2, { message: "2文字以上入力してください" })
-    .max(20, { message: "20文字以内にしてください" }),
-  description: z
-    .string({ required_error: "タスクの内容を入力してください" })
-    .trim()
-    .min(2, { message: "2文字以上入力してください" })
-    .max(100, { message: "100文字以内にしてください" }),
-  dueDate: z.date({ required_error: "日付を選択してください" }),
-  important: z.boolean({ required_error: "重要度を選択してください" }),
-  completed: z.boolean({ required_error: "完了したかどうか選択してください" }),
-  userId: z.string(),
-});
-
-const createTaskSchema = taskSchema.omit({
-  id: true,
-  completed: true,
-  userId: true,
-});
-
-type CreateTask = z.infer<typeof createTaskSchema>;
-
-export default function AddTaskForm() {
+export default function AddTaskForm({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
   const form = useForm<CreateTask>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -60,15 +38,22 @@ export default function AddTaskForm() {
     },
   });
 
-  const onSubmit = (task: CreateTask) => {
-    console.log(task);
+  const onSubmit = async ({
+    title,
+    description,
+    dueDate,
+    important,
+  }: CreateTask) => {
+    await createTask({ title, description, dueDate, important });
+    onClose();
+    router.refresh();
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 p-4 bg-white rounded-sm"
+        className="space-y-4 p-4 bg-white"
       >
         <FormField
           control={form.control}
